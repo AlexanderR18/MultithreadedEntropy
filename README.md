@@ -1,2 +1,2 @@
 # MultithreadedEntropy
-Calculates the entropy each scheduling instance in a multiprocessor system where are multiple tasks being executed by the processor represented by letters A,B,C,... and the time instant that they are executed at represented by an integer value. 
+Calculates the entropy each scheduling instance in a multiprocessor system where are multiple tasks being executed by the processor represented by letters A,B,C,... and the time instant that they are executed at represented by an integer value. The program runs as a multithreaded solution calculating each CPU's entropy concurrently and then prints the entropy at each scheduling instance.
