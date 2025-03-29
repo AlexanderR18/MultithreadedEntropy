@@ -8,9 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <iomanip>
-//using namespace std;
-//using std::cout;
-//using std::cin;
+
 
 struct data
 {
@@ -25,35 +23,19 @@ void* threadFunction(void *arg_ptr)
 {
     data* arg = (data*) arg_ptr;
 
-    int newFrequency=0;   //Current Frequency + extra frequency used as next current frequency
+    int newFrequency=0;             //Current Frequency + extra frequency used as next current frequency
     int Freq=0;
-    int currentFreq=0;    //Running total of Frequencies
-    std :: string selectedTask;  //CurrentTask is letter of current Task
-    int extraFrequency;   //Frequency of current Task
-    double H=0;             //The entropy calculation of the current term
-    double currH=0;         //CurrH is the running total of all entropys
+    int currentFreq=0;              //Running total of Frequencies
+    std :: string selectedTask;     //CurrentTask is letter of current Task
+    int extraFrequency;             //Frequency of current Task
+    double H=0;                     //The entropy calculation of the current term
+    double currH=0;                 //CurrH is the running total of all entropys
     double newTerm =0;
-    double currentTerm=0;       
-    //currentTerm will equal 0 unless the selectedTask is a duplicate in which 
-    //case it will equal the frequency of the previous selectedTask
-
-
+    double currentTerm=0;           //currentTerm will equal 0 unless the selectedTask is a duplicate in which 
     
-/*    cout << "Arg Tasks ";
-    for(int i=0;i<arg->tasksVec.size();i++)
-    {
-      cout << arg->tasksVec[i] << " ";  
-    }
-    cout << endl;
-*/   
-/*
-    cout << "Before process starts " << endl;
-    for(auto i = arg->trackFreq.begin(); i != arg->trackFreq.end(); i++)
-    {
-        cout << i->first << " \t " << i->second << endl;
-    }
-    cout << endl;
-*/
+                                    //case it will equal the frequency of the previous selectedTask
+
+
  
    for(int i=0;i<arg->tasksVec.size();i++)
    {
@@ -69,13 +51,6 @@ void* threadFunction(void *arg_ptr)
    newFrequency = currentFreq + extraFrequency;
    //cout << "The current new freq is " << newFrequency << endl;
 
-/*
-   for(auto i = arg->trackFreq.begin(); i != arg->trackFreq.end(); i++)
-    {
-        cout << i->first << " \t " << i->second << endl;
-    }
-    cout << endl;
-*/   
     if(newFrequency == extraFrequency)
     {
         H=0;
@@ -88,17 +63,15 @@ void* threadFunction(void *arg_ptr)
     
     else if(arg->trackFreq[selectedTask] == 0)
         {
-            //cout << "Reached 1 " << endl;
+            
             currentTerm = 0;
         }
     else
         {
-            //cout << "Reached 2 " << endl;
-            //cout << "track freq " << arg->trackFreq[selectedTask] << endl;
 
             currentTerm = arg->trackFreq[selectedTask] * log2(arg->trackFreq[selectedTask]);
         
-            //cout << "Current Term " << currentTerm << endl;
+           
         }
 
             newTerm = (arg->trackFreq[selectedTask] + extraFrequency) * log2(arg->trackFreq[selectedTask] + extraFrequency);
@@ -110,29 +83,10 @@ void* threadFunction(void *arg_ptr)
 
             currentFreq += extraFrequency;
 
-            //cout << "H is " << H << endl;
-            //cout << endl;
-
             arg->entropyVec.push_back(H);
             
    }
-   
-    //Pushback H setprecision 2 to arg->EntropyVector
-/*
-    for(auto i = arg->trackFreq.begin(); i != arg->trackFreq.end(); i++)
-    {
-        cout << i->first << " \t " << i->second << endl;
-    }
-    cout << endl;
-*/    
-    /*
-    cout << "Entropy after cycle " << endl;
-    for(int i=0;i<arg->entropyVec.size();i++)
-    {
-        cout << arg->entropyVec[i] << " ";
-    }
-    cout << endl;
-    */
+  
 
     return nullptr;
 }
@@ -165,11 +119,6 @@ int main() {
     data structure[NTHREADS];
     pthread_t tid[NTHREADS];
 
-
-    for(int i=0;i<NTHREADS;i++)
-    {
-        //cout << "Input read as " << readingInput[i] << endl;
-    }
  
     //For the number of threads begin to parse input
     for(int i=0;i<NTHREADS;i++)
@@ -208,8 +157,6 @@ int main() {
             trackingFrequency.insert( std :: pair< std::string, int> (tasks[i],0));
         }
           
-
-        //for (int i = 0; i < NTHREADS; i++)
         structure[i] = {trackingFrequency, frequencies, tasks, Entropy};
        
         if (pthread_create(&tid[i], NULL, threadFunction, &structure[i]))
@@ -218,9 +165,6 @@ int main() {
             return 1;
         }
         
-        
-       
-
     }
 
 
@@ -230,30 +174,6 @@ int main() {
         pthread_join(tid[i],nullptr);
     }
 
-
-/*
-    cout << "Tasks are " << endl;
-    for(int i=0;i<tasks.size();i++)
-      {
-        cout << tasks[i] << " ";
-      }
-    cout << endl;
-*/
-/*
-    //Map
-    for(auto i = trackingFrequency.begin(); i != trackingFrequency.end(); i++)
-    {
-        cout << i->first << " \t " << i->second << endl;
-    }
-*/    
-/*
-    cout << "Frequencies are " << endl;
-    for(int i=0;i<frequencies.size();i++)
-    {
-        cout << frequencies[i] << " ";
-    }
-    cout << endl;   
-*/   
 
     std :: string schedulingInformation;
     std :: vector< std :: string> outString;
@@ -290,7 +210,6 @@ int main() {
             std :: cout << std :: endl;
         }
         
-      
     
     //Last print with all of task scheduling information from cpo 1 to cpu NTHREADS
     for(int i=0;i<NTHREADS;i++)
